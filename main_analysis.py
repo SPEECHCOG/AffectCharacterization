@@ -84,8 +84,6 @@ def plot_valence_LR_with_arousal_split_results(results, quantiles=None, indice_i
     ax2.scatter(quantiles, low_ar_label_corr, marker="o")
     ax2.scatter(quantiles, high_ar_label_corr, marker="o",)
     
-    
-    
 
     # Vertical connector lines with cosine distance
     for i, q in enumerate(quantiles):
@@ -99,25 +97,12 @@ def plot_valence_LR_with_arousal_split_results(results, quantiles=None, indice_i
             ax.plot([q, q], [low_corr[i], high_corr[i]], 
                 color="gray", linestyle="--", linewidth=1)
             
-        
-        
         corr_diff = high_corr[i] - low_corr[i]
         
-        
-
         # Position cosine distance text slightly to the right of the connector
         y_mid = (low_corr[i] + high_corr[i]) / 2
         ax.text(q + 0.005, y_mid, f"{cos_dist[i]:.2f}", fontsize=MEDIUM_SIZE, va="center")
-        #ax.text(q + 0.005, y_mid, f"{corr_diff:.2f}", fontsize=9, va="center")
-        
-        '''
-        if indice_intersections != None:
-            
-            if i == len(quantiles)-1:
-                continue
-            
-            ax.fill_between([q, quantiles[i+1]], [low_corr[i], low_corr[i+1]], [high_corr[i], high_corr[i+1]], color="red", alpha=indice_intersections[i]/np.max(indice_intersections))
-         '''   
+
 
     # Labels and formatting
     ax.set_xticks(quantiles)
@@ -135,10 +120,6 @@ def plot_valence_LR_with_arousal_split_results(results, quantiles=None, indice_i
     ax2.set_yticks(np.arange(0.02, 0.2, 0.025))
     ax2.set_xticks(quantiles)
     
-    
-    #handles, labels = ax.get_legend_handles_labels()
-    #legend = fig.legend(handles, labels, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.15))
-    
     legend = ax.legend()
     for line in legend.get_lines():
         line.set_linewidth(3.0)
@@ -147,7 +128,6 @@ def plot_valence_LR_with_arousal_split_results(results, quantiles=None, indice_i
     for line in legend.get_lines():
         line.set_linewidth(3.0)
     
-    #plt.tight_layout(rect=[0, 0, 1, 0.95])
     plt.tight_layout()
     plt.show()
     
@@ -246,6 +226,7 @@ if __name__ == '__main__':
     
     #Loop through all the annotated samples and read sample audio, transcription
     #and alignment files, if the features are yet not computed
+    #NOTE: For this you need the whole FinnAffect corpus, including metadata
     if not os.path.isfile(cwd+"//"+"all_features_df.csv"):
     
         
