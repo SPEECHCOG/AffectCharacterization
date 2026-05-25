@@ -40,6 +40,21 @@ plt.rc('figure', titlesize=SMALL_SIZE)  # fontsize of the figure title
 plt.rc('font', **{'family': 'sans-serif', 'sans-serif': ['Arial']})
 
 
+
+# Function to determine annotator ID
+def get_annotator(row):
+    ann_cols = ["a1", "a2", "a3", "a4", "a5"]
+    non_null = row[ann_cols].dropna()
+    
+    if len(non_null) == 1:
+        return non_null.index[0]  # annotator column name
+    elif len(non_null) == 5:
+        return "mean"
+    else:
+        return np.nan  # optional: handle other cases if needed
+
+
+
 def plot_valence_LR_with_arousal_split_results(results, quantiles=None, indice_intersections=None, low_ar_label_corr=None, high_ar_label_corr=None):
     """
     Visualize 3×N results:
@@ -222,6 +237,16 @@ if __name__ == '__main__':
     annotated_only_ids = valence_continuous_normalized[~valence_continuous_normalized["mean"].isna()].index.to_list()
     GS_indices = valence_continuous_normalized.dropna().index.to_list()
     all_ids = valence_continuous_normalized.index.to_list()
+    
+    
+    valence_annotated_continuous_normalized = valence_continuous_normalized.iloc[annotated_only_ids]
+    arousal_annotated_continuous_normalized = arousal_continuous_normalized.iloc[annotated_only_ids]
+    
+    valence_annotated_continuous_normalized['annotator_id'] = valence_annotated_continuous_normalized.apply(get_annotator, axis=1)
+    arousal_annotated_continuous_normalized['annotator_id'] = arousal_annotated_continuous_normalized.apply(get_annotator, axis=1)
+    
+    valence_annotated_continuous_normalized.to_csv(cwd+"/valence_annotated_normalized.csv")
+    arousal_annotated_continuous_normalized.to_csv(cwd+"/arousal_annotated_normalized.csv")
     
     
     #Loop through all the annotated samples and read sample audio, transcription
@@ -417,6 +442,9 @@ if __name__ == '__main__':
     
     valence_LR_experiment_results, valence_LR_coeff_df = experiments.linear_regression_experiment(all_labels_df["valence"], valence_significant_features_df)
     arousal_LR_experiment_results, arousal_LR_coeff_df = experiments.linear_regression_experiment(all_labels_df["arousal"], arousal_significant_features_df)
+    
+    valence_significant_features_df.to_csv(cwd+"valence_significant_features.csv")
+    arousal_significant_features_df.to_csv(cwd+"arousal_significant_features.csv")
     
     valence_LR_experiment_results[valence_LR_coeff_df["Feature name"]] = valence_LR_coeff_df["M"] 
     arousal_LR_experiment_results[arousal_LR_coeff_df["Feature name"]] = arousal_LR_coeff_df["M"] 
@@ -798,7 +826,16 @@ if __name__ == '__main__':
         
     plot_valence_LR_with_arousal_split_results(quantile_range_rs, quantiles=starting_point_percentiles, indice_intersections=index_intersection, low_ar_label_corr = quantile_range_low_label_corrs, high_ar_label_corr=quantile_range_high_label_corrs)
     
-
+    # samples per speaker analysis
+    
+    if os.path.isfile(cwd+"//"+"speaker_ids_anon.csv"):
+        
+        speaker_ids = pd.read_csv(cwd+"//"+"speaker_ids_anon.csv")
+        
+        samples_per_id = speaker_ids["speaker_id_fixed_int"].value_counts()
+        
+        print("mean samples per id: "+str(samples_per_id.mean()))
+        print("median samples per id: "+str(samples_per_id.median()))
 
     
     # COMBINE LINEAR REGRESSION RESULTS INTO ONE TABLE
