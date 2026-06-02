@@ -225,6 +225,12 @@ if __name__ == '__main__':
     arousal_continuous_normalized = pd.read_csv(cwd+"/arousal_normalized.csv")
     arousal_continuous_normalized = arousal_continuous_normalized.set_index("Unnamed: 0")
     
+    valence_continuous_unnormalized = pd.read_csv(cwd+"/valence.csv")
+    valence_continuous_unnormalized = valence_continuous_unnormalized.set_index("Unnamed: 0")
+    
+    arousal_continuous_unnormalized = pd.read_csv(cwd+"/arousal.csv")
+    arousal_continuous_unnormalized = arousal_continuous_unnormalized.set_index("Unnamed: 0")
+    
     #THE FOLLOWING DATA FILES ARE ONLY AVAILABLE THROUGH THE OFFICIAL FINNAFFECT CORPUS FROM KIELIPANKKI
     #metadata = pd.read_csv(data_storage_dir+"metadata.csv")
     #metadata = metadata.set_index("Unnamed: 0")
@@ -242,11 +248,20 @@ if __name__ == '__main__':
     valence_annotated_continuous_normalized = valence_continuous_normalized.iloc[annotated_only_ids]
     arousal_annotated_continuous_normalized = arousal_continuous_normalized.iloc[annotated_only_ids]
     
+    valence_annotated_continuous_unnormalized = valence_continuous_unnormalized.iloc[annotated_only_ids]
+    arousal_annotated_continuous_unnormalized = arousal_continuous_unnormalized.iloc[annotated_only_ids]
+    
     valence_annotated_continuous_normalized['annotator_id'] = valence_annotated_continuous_normalized.apply(get_annotator, axis=1)
     arousal_annotated_continuous_normalized['annotator_id'] = arousal_annotated_continuous_normalized.apply(get_annotator, axis=1)
     
+    valence_annotated_continuous_unnormalized['annotator_id'] = valence_annotated_continuous_unnormalized.apply(get_annotator, axis=1)
+    arousal_annotated_continuous_unnormalized['annotator_id'] = arousal_annotated_continuous_unnormalized.apply(get_annotator, axis=1)
+    
     valence_annotated_continuous_normalized.to_csv(cwd+"/valence_annotated_normalized.csv")
     arousal_annotated_continuous_normalized.to_csv(cwd+"/arousal_annotated_normalized.csv")
+    
+    valence_annotated_continuous_unnormalized.to_csv(cwd+"/valence_annotated_unnormalized.csv")
+    arousal_annotated_continuous_unnormalized.to_csv(cwd+"/arousal_annotated_unnormalized.csv")
     
     
     #Loop through all the annotated samples and read sample audio, transcription
