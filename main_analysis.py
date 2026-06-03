@@ -326,15 +326,15 @@ if __name__ == '__main__':
         
         #get speaker metadata 
         all_features["utt_id"] = utt_ids
-        speakers = metadata["speaker id"].iloc[utt_ids]
-        speaker_gender = metadata["speaker gender"]
+        #speakers = metadata["speaker id"].iloc[utt_ids]
+        #speaker_gender = metadata["speaker gender"]
     
         #combine features and speaker metadata into one dataframe
         all_features_df = pd.DataFrame.from_dict(all_features)
         all_features_df.set_index("utt_id", inplace=True)
         all_labels_df = all_features_df[["valence", "arousal"]]
         all_features_df.drop(["valence", "arousal"], axis=1, inplace=True)
-        all_features_df["speaker_gender"] = speaker_gender
+        #all_features_df["speaker_gender"] = speaker_gender
         
         
         #select features that will be mean normalized by speaker gender info
