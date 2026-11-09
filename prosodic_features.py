@@ -3,7 +3,7 @@
 """
 Created on Tue Sep 16 11:37:04 2025
 
-@author: lahtine9
+@author: Kalle Lahtinen
 """
 
 import librosa

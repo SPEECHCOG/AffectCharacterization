@@ -3,7 +3,7 @@
 """
 Created on Wed Oct  8 15:42:43 2025
 
-@author: lahtine9
+@author: Kalle Lahtinen
 """
 import pandas as pd
 import numpy as np
